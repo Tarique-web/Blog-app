@@ -1,39 +1,3 @@
-// module.exports = (router, knex) => {
-
-// 	router
-// 		.get('/', (req, res) => {
-// 			res.send("welcome to page");
-// 			console.log("welcom to my page");
-// 		})
-
-
-
-
-// 		.post('/author', function (req, res) {
-// 			var email = req.body.email;
-// 			var password = req.body.password;
-
-// 			knex.select('*').from('users').where('email',email)
-// 			.then((result)=>{
-// 				if(result.length>0){
-// 					if (password== result[0].password){
-// 						res.send('successfull login')
-// 					}else{
-// 						res.send("email and password does not match")
-// 					}
-// 				}
-// 				else{
-// 					res.send("email doesn't exist")
-
-// 				}
-
-// 		});
-// 	})
-
-
-// };	
-// -------------------------------------------------------------------------------------------------------------
-
 module.exports = (router, knex, jwt) => {
 	router
 
