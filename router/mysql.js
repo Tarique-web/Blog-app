@@ -1,26 +1,3 @@
-// const mysql  = require("mysql");
-// var knex = require('knex')({
-//   client: 'mysql',
-//   connection: {
-//       host: 'localhost',
-//       user: 'root',
-//       password: '1',
-//       database: 'data',
-//       insecureAuth : true
-//   }
-// })
-
-// const knex = require("knex")({
-// 	client:process.env.client,
-// 	connection:{
-// 		user:process.env.user,
-// 		password:process.env.password,
-// 		host:process.env.host,
-// 		database:process.env.database,
-// 	}
-// })
-
-// -------------------------------------------------------------------------------
 module.exports = (knex) => {
 
     knex.schema.hasTable('users').then(function (exists) {
