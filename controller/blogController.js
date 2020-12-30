@@ -27,31 +27,27 @@ exports.blogPost = (req, res) => {
             status: 400
         });
     }
-    if (!req.body.email || req.body.email == "") {
-        return res.status(400).send({
-            message: "Email can not be empty",
-            status: 400
-        });
-    }
 
-
-    var cookie = req.headers.cookie.slice(4);
-    var token_verify = jwt.verify(cookie, process.env.SECRET_KEY);
+    const cookie = req.headers.cookie.slice(6);
+    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY);
     var dateTime = new Date();
-
-    knex.select("*").from("userBlog").insert({
-
-        "user_id": token_verify.email,
+   
+    const blog = {
+        "userId": token_verify.firstName,
         "tittle": req.body.tittle,
         "description": req.body.description,
-        "created_on": dateTime
-    })
-        .then((data) => {
+        "created_on": dateTime,
+        "email": token_verify.email
+    }
 
+    knex.select("*").from("userBlog").insert(blog)
+        .then(() => {
             res.send({
-                message: "success", data,
+                message: "success", blog,
                 status: 200
             });
+
+
         }).catch((err) => {
             res.status(500).send({
                 message: err.message || "Some error occurred while posting blog.",
@@ -81,19 +77,21 @@ exports.updateBlog = (req, res) => {
             status: 400
         });
     }
+    const cookie = req.headers.cookie.slice(6);
+    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY);
 
-    const cookie = req.headers.cookie.slice(4);
-    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY).email;
-
-    knex.select("*").from('userBlog')
-        .where({ "user_id": token_verify })
+    knex.select(
+        "tittle",
+        "description"
+    ).from('userBlog')
+        .where({ "email": token_verify.email })
         .andWhere({ "id": req.params.id })
         .update(req.body)
         .then((data) => {
             console.log("blog successfully updated")
             res.setHeader("content-type", "application/json");
             res.status(200).send({
-                message: data,
+                message: req.body,
                 status: 200
             })
 
@@ -118,12 +116,11 @@ exports.deleteBlog = (req, res) => {
         });
     }
 
-
-    const cookie = req.headers.cookie.slice(4);
-    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY).email;
+    const cookie = req.headers.cookie.slice(6);
+    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY);
 
     knex.select("*").from('userBlog')
-        .where({ "user_id": token_verify })
+        .where({ "email": token_verify.email })
         .andWhere({ "id": req.params.id })
         .del()
         .then(() => {
@@ -131,7 +128,7 @@ exports.deleteBlog = (req, res) => {
 
             res.setHeader("content-type", "application/json");
             res.status(200).send({
-                message: "Blog successfully deleted",
+                message: "Blog successfully delated",
                 status: 200
             })
 
@@ -147,12 +144,16 @@ exports.deleteBlog = (req, res) => {
 
 //User get his all posted blog
 exports.getBlog = (req, res) => {
+    const cookie = req.headers.cookie.slice(6);
+    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY);
 
-    const cookie = req.headers.cookie.slice(4);
-    const token_verify = jwt.verify(cookie, process.env.SECRET_KEY).email;
-
-    knex.select("*").from('userBlog')
-        .where({ "user_id": token_verify })
+    knex.select(
+        "userId",
+        "tittle",
+        "description",
+        "created_on"
+    ).from('userBlog')
+        .where({ "email": token_verify.email })
         .then((data) => {
 
             res.setHeader("content-type", "application/json");
@@ -170,11 +171,16 @@ exports.getBlog = (req, res) => {
 
 }
 
-//User can Get all user posted Blog
+//All User can see all user posted Blog
 exports.getAllBlog = (req, res) => {
 
     knex
-        .select("*")
+        .select(
+            "userId",
+            "tittle",
+            "description",
+            "created_on"
+        )
         .from('userBlog')
         .then((data) => {
 
@@ -194,21 +200,27 @@ exports.getAllBlog = (req, res) => {
 
 }
 
-exports.byIdBlog = (req,res) => {
+// All user can get posted blog by id
+exports.BlogbyId = (req, res) => {
 
     if (!req.params || (req.params.id) == "") {
-        console.log({ "blogController": "byIdBlog: blog id con't be empty" })
+        console.log({ "blogController": "BlogbyId: blog id con't be empty" })
         return res.status(400).send({
             message: "blog Id can not be empty",
             status: 400
         });
     }
 
+    knex.select(
+        "userId",
+        "tittle",
+        "description",
+        "created_on"
 
-    knex.select("*").from('userBlog')
+    ).from('userBlog')
         .where({ "id": req.params.id })
         .then((data) => {
-           
+
 
             res.setHeader("content-type", "application/json");
             res.status(200).send({

@@ -1,7 +1,7 @@
 const knex = require("../config/dbconfig")
 const jwt = require("jsonwebtoken"); // jsonwebtoken module for create token
 const bcrypt = require("bcryptjs");
-console.log(process.env.SECRET_KEY);
+
 exports.login = (req, res) => {
     if (Object.keys(req.body).length === 0) {
         return res.status(400).send({
@@ -10,10 +10,7 @@ exports.login = (req, res) => {
         });
     }
 
-    if (
-        (!req.body.email || req.body.email == "") &&
-        (!req.body.mobile || req.body.mobile == "")
-    ) {
+    if (!req.body.email || req.body.email == ""){
         return res.status(400).send({
             message: "mobile or email can not be empty",
             status: 400
@@ -24,7 +21,7 @@ exports.login = (req, res) => {
         return res.status(400).send({
             message: "password can not be empty",
             status: 400
-        });
+        });package-lock.json
     }
 
     knex.select('*')
@@ -43,9 +40,9 @@ exports.login = (req, res) => {
                         })
                     } else {
 
-                        console.log({ "Login successfull!": data[0].first_name });
+                        console.log({ "Login successfull!": data[0].firstName });
 
-                        let token = jwt.sign({ "id": data[0].id, "first-name": data[0].first_name, "email": data[0].email, "Mobile_no": data[0].Mobile_no }, process.env.SECRET_KEY, {
+                        let token = jwt.sign({ "id": data[0].id, "firstName": data[0].firstName, "email": data[0].email, "mobile": data[0].Mobile_no }, process.env.SECRET_KEY, {
                             expiresIn: "7 days",
                         }); // create token here and it will expire in 7 days
 
@@ -53,7 +50,7 @@ exports.login = (req, res) => {
                         res.setHeader("content-type", "application/json");
                         res.send({
                             status: 200,
-                            name: data[0].first_name,
+                            name: data[0].firstName,
                             message: "login successfully",
                             token: token,
                         })
@@ -72,7 +69,7 @@ exports.login = (req, res) => {
             }
         }).catch((err) => {
             res.status(500).send({
-                message: "user not found",
+                message: message.err || "user not found",
                 status: 500
             })
 

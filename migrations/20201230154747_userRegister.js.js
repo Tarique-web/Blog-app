@@ -1,12 +1,12 @@
 
-exports.up =(knex) => {
+exports.up = (knex) => {
 
-    return knex.schema.createTable('userRegister',(table) => {
+    return knex.schema.createTable('userRegister', (table) => {
         table.increments().primary()
-        table.string('first_name').notNullable()
-        table.string('last_name').notNullable()
+        table.string('firstName').notNullable()
+        table.string('lastName').notNullable()
         table.text('email').notNullable()
-        table.text('Mobile_no').notNullable()
+        table.text('mobile').notNullable()
         table.text('password').notNullable()
 
     });
