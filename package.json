@@ -9,14 +9,24 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.1",
+    "knex": "^0.21.15",
+    "knex-migrate": "^1.7.4",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.4"
   },
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tarique-web/Blog-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tarique-web/Blog-app/issues"
+  },
+  "homepage": "https://github.com/Tarique-web/Blog-app#readme",
+  "devDependencies": {}
 }
